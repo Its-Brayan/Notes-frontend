@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:notes/Screens/Home.dart';
 import 'package:notes/Screens/notetaker.dart';
+import 'package:provider/provider.dart';
+import 'package:notes/Providers/Notesprovider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+      ChangeNotifierProvider(
+        create: (context) => NotesProvider(),
+        child:  const MyApp()
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {

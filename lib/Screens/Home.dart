@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import 'package:notes/Providers/Notesprovider.dart';
+import 'package:notes/Models/NotesModel.dart';
+import 'package:notes/Screens/notetaker.dart';
 class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final notesProvider = Provider.of<NotesProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.black54,
     body: SafeArea(
@@ -59,13 +64,19 @@ class Home extends StatelessWidget {
                    child: ListTile(
 
                      tileColor: Colors.grey.shade600,
-                     title: Text("Beautiful notes app Ui concept",
+                     title: Text(,
                      style: TextStyle(
                        color: Colors.white,
                      ),),
                      subtitle: Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vehicula maximus nisl vitae volutpat. Praesent elit leo, ornare iaculis mattis sed, tempor eu sem. Duis sodales lectus quis venenatis egestas.'),
                      onTap: (){
-                       Navigator.pushNamed(context, '/takenotes');
+                       Navigator.push(
+                         context,
+                          MaterialPageRoute(
+                            builder: (context) => notetaker(),
+
+                          )
+                       );
                      }
                    ),
 

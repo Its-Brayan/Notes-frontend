@@ -59,7 +59,12 @@ class notetaker extends StatelessWidget {
               notesProvider.updatenote(notestitle);
 
               },
-
+             onChanged: (value){
+                notesProvider.updatenote(NotesModel(
+                title: titleController.text,
+                ),
+    );
+             },
               toolbarOptions: ToolbarOptions(
                 copy: true,
                 cut: true,
@@ -78,6 +83,7 @@ class notetaker extends StatelessWidget {
               enableSuggestions: true,
               autofocus: true,
               controller: titleController,
+
               style: TextStyle(
 
                 color: Colors.white,
@@ -92,6 +98,12 @@ class notetaker extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: TextField(
+              onChanged: (value){
+                notesProvider.updatenote(NotesModel(
+                  content: contentController.text,
+                ),
+                );
+              },
               cursorColor: Colors.orange,
               textDirection: TextDirection.ltr,
               toolbarOptions: ToolbarOptions(

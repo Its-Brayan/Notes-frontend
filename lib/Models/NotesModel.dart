@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 class NotesModel{
   int? id;
   String? title;
@@ -11,4 +13,10 @@ class NotesModel{
       'content':content,
     };
   }
-}
+NotesModel.fromJson(Map<String,dynamic> json){
+    id = json['id'];
+    title = json['title'];
+    content = json['content'];
+
+    }
+  }

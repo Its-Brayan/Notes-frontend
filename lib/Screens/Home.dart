@@ -9,7 +9,6 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final notesProvider = Provider.of<NotesProvider>(context);
-
     return Scaffold(
       backgroundColor: Colors.black54,
     body: SafeArea(
@@ -56,6 +55,7 @@ class Home extends StatelessWidget {
            Row(
              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
              children: [
+
                Expanded(
                  child: Card(
 
@@ -64,7 +64,7 @@ class Home extends StatelessWidget {
                    child: ListTile(
 
                      tileColor: Colors.grey.shade600,
-                     title: Text(,
+                     title: Text("Beautiful notes app Ui concept",
                      style: TextStyle(
                        color: Colors.white,
                      ),),

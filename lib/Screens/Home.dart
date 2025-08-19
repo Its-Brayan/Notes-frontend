@@ -90,14 +90,16 @@ class _HomeState extends State<Home> {
                         onLongPress: ()async{
 
                         },
-                        title:Text(note.title ?? "Untitled",
+                        title:Text(
+                          (note.title == null || note.title!.trim().isEmpty) ? 'Untitled' : note.title!,
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                          fontSize: 20,
                     color: Colors.white,
                     ),
                         ),
-                        subtitle: Text(note.content ?? "",
+                        subtitle: Text(
+                            (note.content == null || note.content!.trim().isEmpty) ? 'No content' : note.content!,
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.grey.shade500,

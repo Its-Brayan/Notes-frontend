@@ -47,7 +47,7 @@ Future<void> getnotebyid(int noteid) async{
     else {
       final success = await NotesServices().updateNote(note);
       if (success) {
-       final index = _notes.indexWhere((note) => note.id == note.id);
+       final index = _notes.indexWhere((n) => n.id == note.id);
         if (index != -1) {
           _notes[index] = note;
           _currentnote = note;

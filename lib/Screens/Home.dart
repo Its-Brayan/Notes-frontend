@@ -84,11 +84,22 @@ class _HomeState extends State<Home> {
                   itemBuilder: (context,index) {
                     final note = notes[index];
                     return Card(
+                      color:Colors.grey.shade900,
                       margin: EdgeInsets.all(8),
                       child: ListTile(
-                        title:Text(note.title ?? "Untitled"),
+                        title:Text(note.title ?? "Untitled",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                         fontSize: 20,
+                    color: Colors.white,
+                    ),
+                        ),
                         subtitle: Text(note.content ?? "",
-                        maxLines: 2,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.grey.shade500,
+                        ),
+                        maxLines: 5,
                         overflow: TextOverflow.ellipsis),
                      onTap: (){
                           notesProvider.setCurrentNote(note);

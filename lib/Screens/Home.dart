@@ -172,7 +172,30 @@ class _HomeState extends State<Home> {
         size: 30,
         color: Colors.white,),
       ),
-
+bottomNavigationBar: Consumer<NotesProvider>(
+ builder: (context,notesProvider,child){
+   if(!notesProvider.selectionMode){
+     return SizedBox.shrink();
+   }
+   return BottomAppBar(
+  color: Colors.black54,
+     child: Row(
+       mainAxisAlignment: MainAxisAlignment.spaceAround,
+       children: [
+         IconButton(onPressed: (){
+           notesProvider.selectedNotes.forEach((noteId) {
+             notesProvider.deletenote(noteId);
+           });
+           notesProvider.selectedNotes.clear();
+         }, icon: Icon(Icons.delete,
+       color: Colors.red,
+   ),
+         ),
+         ]
+     )
+   );
+ }
+)
     );
   }
 }

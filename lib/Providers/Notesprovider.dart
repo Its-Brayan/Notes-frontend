@@ -19,6 +19,7 @@ class NotesProvider with ChangeNotifier{
       return false;
     }else{
       notifyListeners();
+      await getNotes();
       return true;
     }
   }
@@ -65,6 +66,7 @@ Future<void> getnotebyid(int noteid) async{
   Future<List<NotesModel>> getNotes() async{
 
     _notes = await NotesServices().getNotes();
+    print(_notes.length);
     notifyListeners();
     return notes;
   }

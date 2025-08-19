@@ -13,7 +13,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   void initState(){
     super.initState();
-    Provider.of<NotesProvider>(context,listen: false).getNotes();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<NotesProvider>(context, listen: false).getNotes();
+    });
   }
   @override
   Widget build(BuildContext context) {
@@ -71,32 +73,32 @@ class _HomeState extends State<Home> {
                  child: Text('No notes yet'),
                  );
                 }
-                return ListView.builder(
+                return GridView.builder(
+                  padding: EdgeInsets.all(8),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 2,
+                    mainAxisSpacing: 2,
+                  ),
                 itemCount: notes.length,
                   itemBuilder: (context,index) {
                     final note = notes[index];
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Card(
-                          margin: EdgeInsets.all(8),
-                          child: ListTile(
-                            title:Text(note.title ?? "Untitled"),
-                            subtitle: Text(note.content ?? "",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis),
-                         onTap: (){
-                              notesProvider.setCurrentNote(note);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (_)=>notetaker()
-                           ),
-                              );
-                         },
-                          ),
-                        ),
-                      ],
+                    return Card(
+                      margin: EdgeInsets.all(8),
+                      child: ListTile(
+                        title:Text(note.title ?? "Untitled"),
+                        subtitle: Text(note.content ?? "",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis),
+                     onTap: (){
+                          notesProvider.setCurrentNote(note);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_)=>notetaker()
+                       ),
+                          );
+                     },
+                      ),
                     );
                   }
                 );

@@ -37,7 +37,7 @@ Future<NotesModel?> getNote(int noteid) async{
 }
 Future<List<NotesModel>> getNotes() async {
 final response = await http.get(
- Uri.parse('$baseUrl/notes/'),
+ Uri.parse('$baseUrl/create_note/'),
   headers: {
     'Content-Type':'application/json'
   },

@@ -2,10 +2,30 @@ import 'package:flutter/material.dart';
 import 'package:notes/Models/NotesModel.dart';
 import 'package:notes/Providers/Notesprovider.dart';
 import 'package:provider/provider.dart';
-class notetaker extends StatelessWidget {
+class notetaker extends StatefulWidget {
   notetaker({super.key});
+
+  @override
+  State<notetaker> createState() => _notetakerState();
+}
+
+class _notetakerState extends State<notetaker> {
+  void initState(){
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final notesProvider = Provider.of<NotesProvider>(context, listen: false);
+      final note = notesProvider.currentnote;
+      if(note != null){
+        titleController.text = note.title ?? '';
+        contentController.text = note.content ?? '';
+      }
+
+    });
+  }
  final TextEditingController titleController = TextEditingController();
+
  final TextEditingController contentController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     final notesProvider = Provider.of<NotesProvider>(context);
@@ -15,12 +35,17 @@ class notetaker extends StatelessWidget {
         children: [
           ListTile(
          leading: IconButton(onPressed: () async {
+           if(titleController.text.trim().isEmpty && contentController.text.trim().isEmpty){
+             Navigator.pop(context);
+             return;
+           }
            if(notesProvider.currentnote == null){
              final newnote = NotesModel(
 
                title: titleController.text,
                content: contentController.text,
              );
+
              await notesProvider.createnote(newnote);
 
            }else{
@@ -147,7 +172,7 @@ class notetaker extends StatelessWidget {
 
 
 
-          
+
           ]
       )),
     );

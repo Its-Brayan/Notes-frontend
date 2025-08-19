@@ -103,8 +103,10 @@ class _HomeState extends State<Home> {
                         overflow: TextOverflow.ellipsis),
                      onTap: (){
                           notesProvider.setCurrentNote(note);
+                          print("tapped ${note.title} ${note.content}");
                           Navigator.push(
                               context,
+
                               MaterialPageRoute(builder: (_)=>notetaker()
                        ),
                           );
@@ -129,6 +131,8 @@ class _HomeState extends State<Home> {
           borderRadius: BorderRadius.circular(50),
         ),
         onPressed: (){
+          final notesProvider = Provider.of<NotesProvider>(context, listen: false);
+          notesProvider.setCurrentNote(null);
           Navigator.pushNamed(context, '/takenotes');
         },
         child: Icon(Icons.add,

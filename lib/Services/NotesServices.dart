@@ -12,6 +12,7 @@ class NotesServices{
           body: jsonEncode(notes.toJson())
         );
         if(response.statusCode==201){
+          print(response.body);
           return true;
         }else{
           return false;
@@ -26,6 +27,7 @@ Future<NotesModel?> getNote(int noteid) async{
     );
       if(response.statusCode==200){
         final Map<String,dynamic> data = jsonDecode(response.body);
+        print(data);
         return NotesModel.fromJson(data);
       }else{
         return null;
@@ -42,6 +44,7 @@ final response = await http.get(
 );
 if(response.statusCode==200){
   final List<dynamic> data = jsonDecode(response.body);
+  print(data);
   return data.map((item) => NotesModel.fromJson(item)).toList();
 }else{
   return [];
@@ -58,6 +61,7 @@ if(response.statusCode==200){
     );
     if(response.statusCode==200){
       print("Note edited");
+      print(response.body);
       return true;
 
     }else{

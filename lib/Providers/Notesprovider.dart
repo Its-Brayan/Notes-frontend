@@ -22,6 +22,10 @@ class NotesProvider with ChangeNotifier{
       return true;
     }
   }
+  void setCurrentNote(NotesModel? note){
+    _currentnote = note;
+    notifyListeners();
+  }
 Future<void> getnotebyid(int noteid) async{
     notifyListeners();
     try {
@@ -34,19 +38,32 @@ Future<void> getnotebyid(int noteid) async{
 
 
 }
-  Future<bool> updatenote(NotesModel notes) async{
-    notifyListeners();
-    final success = await NotesServices().updateNote(notes);
-    if(!success){
-      _errorMessage = 'Failed to update note';
+  Future<bool> updatenote(NotesModel note) async{
+
+    if(note.id == null){
       return false;
-    }else{
-      notifyListeners();
-      return true;
+    }
+    else {
+      final success = await NotesServices().updateNote(note);
+      if (success) {
+       final index = _notes.indexWhere((note) => note.id == note.id);
+        if (index != -1) {
+          _notes[index] = note;
+          _currentnote = note;
+          notifyListeners();
+          return true;
+        } else {
+          notifyListeners();
+          return false;
+        }
+      } else {
+        notifyListeners();
+        return true;
+      }
     }
   }
   Future<List<NotesModel>> getNotes() async{
-    notifyListeners();
+
     _notes = await NotesServices().getNotes();
     notifyListeners();
     return notes;

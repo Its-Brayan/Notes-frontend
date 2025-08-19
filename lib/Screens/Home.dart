@@ -11,6 +11,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  void initState(){
+    super.initState();
+    Provider.of<NotesProvider>(context,listen: false).getNotes();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -57,61 +61,48 @@ class _HomeState extends State<Home> {
               color: Colors.grey.shade100,
             ),
             SizedBox(height: 30),
-           Row(
-             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-             children: [
 
-               Expanded(
-                 child: Card(
-
-                   color: Colors.grey.shade500,
-                   elevation: 20,
-                   child: ListTile(
-
-                     tileColor: Colors.grey.shade600,
-                     title: Text("Beautiful notes app Ui concept",
-                     style: TextStyle(
-                       color: Colors.white,
-                     ),),
-                     subtitle: Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vehicula maximus nisl vitae volutpat. Praesent elit leo, ornare iaculis mattis sed, tempor eu sem. Duis sodales lectus quis venenatis egestas.'),
-                     onTap: (){
-                       Navigator.push(
-                         context,
-                          MaterialPageRoute(
-                            builder: (context) => notetaker(),
-
-                          )
-                       );
-                     }
-                   ),
-
-                 ),
-               ),
-               Expanded(
-                 child: Card(
-                   surfaceTintColor: Colors.blue,
-
-                   color: Colors.grey.shade500,
-                   elevation: 20,
-                   child: ListTile(
-                     shape: RoundedRectangleBorder(
-                       borderRadius: BorderRadius.circular(20),
-                     ),
-                       tileColor: Colors.grey.shade600,
-                       title: Text("Beautiful notes app Ui concept",
-                         style: TextStyle(
-                           color: Colors.white,
-                         ),),
-                       subtitle: Text('Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vehicula maximus nisl vitae volutpat. Praesent elit leo, ornare iaculis mattis sed, tempor eu sem. Duis sodales lectus quis venenatis egestas.'),
-                       onTap: (){
-                         Navigator.pushNamed(context, '/takenotes');
-                       }
-                   ),
-
-                 ),
-               ),
-             ],
-           )
+          Expanded(
+            child: Consumer<NotesProvider>(
+              builder: (context,notesProvider,child){
+                final notes = notesProvider.notes;
+                if(notes.isEmpty){
+                 return Center(
+                 child: Text('No notes yet'),
+                 );
+                }
+                return ListView.builder(
+                itemCount: notes.length,
+                  itemBuilder: (context,index) {
+                    final note = notes[index];
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Card(
+                          margin: EdgeInsets.all(8),
+                          child: ListTile(
+                            title:Text(note.title ?? "Untitled"),
+                            subtitle: Text(note.content ?? "",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis),
+                         onTap: (){
+                              notesProvider.setCurrentNote(note);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_)=>notetaker()
+                           ),
+                              );
+                         },
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                );
+              }
+            ),
+          )
 
           ],
 

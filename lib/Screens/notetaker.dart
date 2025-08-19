@@ -14,7 +14,23 @@ class notetaker extends StatelessWidget {
       body: SafeArea(child: Column(
         children: [
           ListTile(
-         leading: IconButton(onPressed: (){
+         leading: IconButton(onPressed: () async {
+           if(notesProvider.currentnote == null){
+             final newnote = NotesModel(
+
+               title: titleController.text,
+               content: contentController.text,
+             );
+             await notesProvider.createnote(newnote);
+
+           }else{
+             final updatednote = NotesModel(
+               id: notesProvider.currentnote!.id,
+               title: titleController.text,
+               content: contentController.text,
+             );
+             await notesProvider.updatenote(updatednote);
+           }
            Navigator.pop(context);
          }, icon:Icon(Icons.arrow_back,
          color: Colors.white,
@@ -30,13 +46,21 @@ class notetaker extends StatelessWidget {
                   color: Colors.white,
                 ),
                 ),
-                IconButton(onPressed: (){
-                   final notes = NotesModel(
-                     title: titleController.text,
-                     content: contentController.text,
-                   );
-                   notesProvider.createnote(notes);
-
+                IconButton(onPressed: () async{
+                  if(notesProvider.currentnote == null) {
+                    final newnote = NotesModel(
+                      title: titleController.text,
+                      content: contentController.text,
+                    );
+                  await  notesProvider.createnote(newnote);
+                  }else{
+                    final updatednote = NotesModel(
+                      id: notesProvider.currentnote!.id,
+                      title: titleController.text,
+                      content: contentController.text,
+                    );
+                   await notesProvider.updatenote(updatednote);
+                  }
                 }, icon:Icon(Icons.check_circle_outline,
                 color: Colors.white,
                 )
@@ -52,24 +76,14 @@ class notetaker extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: TextField(
-              onEditingComplete: (){
-              final notestitle = NotesModel(
-               title: titleController.text,
-              );
-              notesProvider.updatenote(notestitle);
+              // onEditingComplete: (){
+              // final notestitle = NotesModel(
+              //  title: titleController.text,
+              // );
+              // notesProvider.updatenote(notestitle);
+              //
+              // },
 
-              },
-             onChanged: (value) async{
-                notesProvider.createnote(NotesModel(
-                  title: titleController.text,
-                ),
-                );
-
-                notesProvider.updatenote(NotesModel(
-                title: titleController.text,
-                ),
-    );
-             },
               toolbarOptions: ToolbarOptions(
                 copy: true,
                 cut: true,
@@ -103,12 +117,7 @@ class notetaker extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: TextField(
-              onChanged: (value){
-                notesProvider.updatenote(NotesModel(
-                  content: contentController.text,
-                ),
-                );
-              },
+
               cursorColor: Colors.orange,
               textDirection: TextDirection.ltr,
               toolbarOptions: ToolbarOptions(

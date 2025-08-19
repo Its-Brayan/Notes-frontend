@@ -67,7 +67,7 @@ class _HomeState extends State<Home> {
           Expanded(
             child: Consumer<NotesProvider>(
               builder: (context,notesProvider,child){
-                final notes = notesProvider.notes;
+                final notes = notesProvider.notes.reversed.toList();
                 if(notes.isEmpty){
                  return Center(
                  child: Text('No notes yet'),
@@ -88,8 +88,7 @@ class _HomeState extends State<Home> {
                       margin: EdgeInsets.all(8),
                       child: ListTile(
                         onLongPress: ()async{
-                          await notesProvider.deletenote(note.id!);
-                          notesProvider.getNotes();
+
                         },
                         title:Text(note.title ?? "Untitled",
                         style: TextStyle(

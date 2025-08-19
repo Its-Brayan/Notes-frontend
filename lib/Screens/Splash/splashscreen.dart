@@ -13,7 +13,7 @@ class splashscreen extends StatelessWidget {
       child:Lottie.asset('assets/animation.json')
     ),
         nextScreen: Home(),
-      splashIconSize: 250,
+      splashIconSize: 200,
       backgroundColor: Colors.black54,
       duration: 5000,
 

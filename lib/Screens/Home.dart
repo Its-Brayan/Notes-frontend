@@ -3,12 +3,17 @@ import 'package:provider/provider.dart';
 import 'package:notes/Providers/Notesprovider.dart';
 import 'package:notes/Models/NotesModel.dart';
 import 'package:notes/Screens/notetaker.dart';
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
+  State<Home> createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> {
+  @override
   Widget build(BuildContext context) {
-    final notesProvider = Provider.of<NotesProvider>(context);
+
     return Scaffold(
       backgroundColor: Colors.black54,
     body: SafeArea(

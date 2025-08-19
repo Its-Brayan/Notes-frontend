@@ -59,7 +59,12 @@ class notetaker extends StatelessWidget {
               notesProvider.updatenote(notestitle);
 
               },
-             onChanged: (value){
+             onChanged: (value) async{
+                notesProvider.createnote(NotesModel(
+                  title: titleController.text,
+                ),
+                );
+
                 notesProvider.updatenote(NotesModel(
                 title: titleController.text,
                 ),

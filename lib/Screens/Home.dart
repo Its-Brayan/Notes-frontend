@@ -83,42 +83,68 @@ class _HomeState extends State<Home> {
                 itemCount: notes.length,
                   itemBuilder: (context,index) {
                     final note = notes[index];
-                    return Card(
-                      color:Colors.grey.shade900,
-                      margin: EdgeInsets.all(8),
-                      child: ListTile(
-                        onLongPress: ()async{
+                    return GestureDetector(
+                      onLongPress: (){
+                        notesProvider.toggleSelection(note.id!);
+                      },
+                      child:Stack(
+                        children: [
 
-                        },
-                        title:Text(
+                    Card(
+                        color:notesProvider.selectedNotes.contains(note.id!) ? Colors.blueGrey.shade700 : Colors.grey.shade900,
+                        margin: EdgeInsets.all(8),
+                        child: ListTile(
 
-                          (note.title == null || note.title!.trim().isEmpty) ? 'Untitled' : note.title!,
-                        style: TextStyle(
-                           overflow: TextOverflow.ellipsis,
-                          fontWeight: FontWeight.bold,
-                         fontSize: 20,
+                          title:Text(
+
+                            (note.title == null || note.title!.trim().isEmpty) ? 'Untitled' : note.title!,
+                          style: TextStyle(
+                             overflow: TextOverflow.ellipsis,
+                            fontWeight: FontWeight.bold,
+                           fontSize: 20,
+                      color: Colors.white,
+                      ),
+                          ),
+                          subtitle: Text(
+                              (note.content == null || note.content!.trim().isEmpty) ? 'No content' : note.content!,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey.shade500,
+                          ),
+                          maxLines: 5,
+                          overflow: TextOverflow.ellipsis),
+                       onTap: (){
+                            if(notesProvider.selectionMode){
+                              notesProvider.toggleSelection(note.id!);
+
+                            }else {
+                              notesProvider.setCurrentNote(note);
+                              print("tapped ${note.title} ${note.content}");
+                              Navigator.push(
+                                context,
+
+                                MaterialPageRoute(builder: (_) => notetaker()
+                                ),
+                              );
+                            }
+                       },
+
+                        ),
+
+                      ),
+                    if(notesProvider.selectionMode)
+                    Positioned(
+                    top: 14,
+                    right: 10,
+                    child: Icon(
+                    notesProvider.selectedNotes.contains(note.id!) ? Icons.check_box : Icons.check_box_outline_blank,
+                    size: 15,
                     color: Colors.white,
                     ),
-                        ),
-                        subtitle: Text(
-                            (note.content == null || note.content!.trim().isEmpty) ? 'No content' : note.content!,
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey.shade500,
-                        ),
-                        maxLines: 5,
-                        overflow: TextOverflow.ellipsis),
-                     onTap: (){
-                          notesProvider.setCurrentNote(note);
-                          print("tapped ${note.title} ${note.content}");
-                          Navigator.push(
-                              context,
+                    ),
 
-                              MaterialPageRoute(builder: (_)=>notetaker()
-                       ),
-                          );
-                     },
-                      ),
+                      ]
+                      )
                     );
                   }
                 );
@@ -146,6 +172,7 @@ class _HomeState extends State<Home> {
         size: 30,
         color: Colors.white,),
       ),
+
     );
   }
 }

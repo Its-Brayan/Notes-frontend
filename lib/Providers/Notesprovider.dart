@@ -4,6 +4,9 @@ import 'package:notes/Services/NotesServices.dart';
 import 'package:provider/provider.dart';
 
 class NotesProvider with ChangeNotifier{
+  Set<int> _selectedNotes = {};
+  bool get selectionMode => _selectedNotes.isNotEmpty;
+  Set<int> get selectedNotes => _selectedNotes;
   List<NotesModel> _notes = [];
   List<NotesModel> get notes => _notes;
   String? _errorMessage;
@@ -11,6 +14,14 @@ class NotesProvider with ChangeNotifier{
   NotesModel? _currentnote;
   NotesModel? get currentnote => _currentnote;
 
+  void toggleSelection(int noteId){
+    if(_selectedNotes.contains(noteId)){
+      _selectedNotes.remove(noteId);
+    }else{
+      _selectedNotes.add(noteId);
+    }
+    notifyListeners();
+  }
   Future<bool> createnote(NotesModel notes) async{
     notifyListeners();
     final success = await NotesServices().createnote(notes);

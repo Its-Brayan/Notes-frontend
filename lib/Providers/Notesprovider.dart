@@ -4,6 +4,8 @@ import 'package:notes/Services/NotesServices.dart';
 import 'package:provider/provider.dart';
 
 class NotesProvider with ChangeNotifier{
+
+
   Set<int> _selectedNotes = {};
   bool get selectionMode => _selectedNotes.isNotEmpty;
   Set<int> get selectedNotes => _selectedNotes;
@@ -13,6 +15,21 @@ class NotesProvider with ChangeNotifier{
   String? get errorMessage => _errorMessage;
   NotesModel? _currentnote;
   NotesModel? get currentnote => _currentnote;
+ void togglePin(int noteId){
+   final notesIndex = _notes.indexWhere((note) => note.id == noteId);
+   if(notesIndex != -1){
+     _notes[notesIndex].pinned = !_notes[notesIndex].pinned!;
+     _notes.sort((a, b) {
+       final aPinned = a.pinned ?? false;
+       final bPinned = b.pinned ?? false;
+       if (aPinned && !bPinned) return -1;
+       if (!aPinned && bPinned) return 1;
+       return a.createdAt.compareTo(b.createdAt);
+
+     });
+     notifyListeners();
+   }
+ }
 
   void toggleSelection(int noteId){
     if(_selectedNotes.contains(noteId)){
@@ -81,7 +98,14 @@ Future<void> getnotebyid(int noteid) async{
   Future<List<NotesModel>> getNotes() async{
 
     _notes = await NotesServices().getNotes();
-    print(_notes.length);
+
+    _notes.sort((a,b){
+      final aPinned = a.pinned ?? false;
+      final bPinned = b.pinned ?? false;
+      if(aPinned && !bPinned) return -1;
+      if(!aPinned && bPinned) return 1;
+      return a.createdAt!.compareTo(b.createdAt!);
+    });
     notifyListeners();
     return notes;
   }

@@ -72,7 +72,7 @@ class _HomeState extends State<Home> {
             Expanded(
               child: Consumer<NotesProvider>(
                 builder: (context,notesProvider,child){
-                  final notes = notesProvider.notes.reversed.toList();
+                  final notes = notesProvider.notes;
                   if(notes.isEmpty){
                    return Center(
                    child: Text('No notes yet'),
@@ -133,7 +133,8 @@ class _HomeState extends State<Home> {
                                 );
                               }
                          },
-
+                           trailing: note.pinned == true ? Icon(Icons.push_pin_outlined,
+                           color: Colors.orange,) : null,
                           ),
 
                         ),
@@ -192,7 +193,7 @@ bottomNavigationBar: Consumer<NotesProvider>(
            notesProvider.selectedNotes.forEach((noteId) {
              notesProvider.deletenote(noteId);
            });
-           notesProvider.selectedNotes.clear();
+            notesProvider.selectedNotes.clear();
          }, icon: Icon(Icons.delete,
        color: Colors.red,
    ),
@@ -202,7 +203,12 @@ bottomNavigationBar: Consumer<NotesProvider>(
    )
          )
          ,
-         IconButton(onPressed: (){}, icon: Icon(Icons.push_pin_outlined,
+         IconButton(onPressed: (){
+           notesProvider.selectedNotes.forEach((noteId) {
+             notesProvider.togglePin(noteId);
+           });
+         }, icon: Icon(Icons.push_pin_outlined,
+
          size: 20,
    )
          )

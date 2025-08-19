@@ -22,138 +22,144 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       backgroundColor: Colors.black54,
-    body: SafeArea(
+    body: GestureDetector(
+      onTap: (){
+        final notesProvider = Provider.of<NotesProvider>(context, listen: false);
+        notesProvider.clearSelection();
+      },
+      child: SafeArea(
 
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Column(
-          children: [
-           ListTile(
-             leading: CircleAvatar(
-               radius: 20,
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: Column(
+            children: [
+             ListTile(
+               leading: CircleAvatar(
+                 radius: 20,
 
-               child: Image.network('https://cdn-icons-png.flaticon.com/128/3048/3048122.png',
-                 width: 25,
-                 height: 30,
-                 fit: BoxFit.cover,
+                 child: Image.network('https://cdn-icons-png.flaticon.com/128/3048/3048122.png',
+                   width: 25,
+                   height: 30,
+                   fit: BoxFit.cover,
+                 ),
                ),
+               title: Text('Hello Brayan',
+               style: TextStyle(
+                 color: Colors.white,
+                 fontWeight: FontWeight.bold,
+               ),
+               ),
+                 trailing:Row(
+                  mainAxisAlignment:MainAxisAlignment.end,
+                   mainAxisSize: MainAxisSize.min,
+                   children: [
+
+                     IconButton(onPressed: (){}, icon:Icon(Icons.search),
+                     ),
+                     IconButton(onPressed: (){}, icon:Icon(Icons.settings),
+                     ),
+
+                     ]
+                 )
              ),
-             title: Text('Hello Brayan',
-             style: TextStyle(
-               color: Colors.white,
-               fontWeight: FontWeight.bold,
-             ),
-             ),
-               trailing:Row(
-                mainAxisAlignment:MainAxisAlignment.end,
-                 mainAxisSize: MainAxisSize.min,
-                 children: [
+              SizedBox(height: 10),
+              Divider(
 
-                   IconButton(onPressed: (){}, icon:Icon(Icons.search),
-                   ),
-                   IconButton(onPressed: (){}, icon:Icon(Icons.settings),
-                   ),
+                color: Colors.grey.shade100,
+              ),
+              SizedBox(height: 30),
 
-                   ]
-               )
-           ),
-            SizedBox(height: 10),
-            Divider(
+            Expanded(
+              child: Consumer<NotesProvider>(
+                builder: (context,notesProvider,child){
+                  final notes = notesProvider.notes.reversed.toList();
+                  if(notes.isEmpty){
+                   return Center(
+                   child: Text('No notes yet'),
+                   );
+                  }
+                  return GridView.builder(
+                    padding: EdgeInsets.all(8),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 2,
+                      mainAxisSpacing: 2,
+                    ),
+                  itemCount: notes.length,
+                    itemBuilder: (context,index) {
+                      final note = notes[index];
+                      return GestureDetector(
+                        onLongPress: (){
+                          notesProvider.toggleSelection(note.id!);
+                        },
+                        child:Stack(
+                          children: [
 
-              color: Colors.grey.shade100,
-            ),
-            SizedBox(height: 30),
+                      Card(
+                          color:notesProvider.selectedNotes.contains(note.id!) ? Colors.blueGrey.shade700 : Colors.grey.shade900,
+                          margin: EdgeInsets.all(8),
+                          child: ListTile(
 
-          Expanded(
-            child: Consumer<NotesProvider>(
-              builder: (context,notesProvider,child){
-                final notes = notesProvider.notes.reversed.toList();
-                if(notes.isEmpty){
-                 return Center(
-                 child: Text('No notes yet'),
-                 );
-                }
-                return GridView.builder(
-                  padding: EdgeInsets.all(8),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 2,
-                    mainAxisSpacing: 2,
-                  ),
-                itemCount: notes.length,
-                  itemBuilder: (context,index) {
-                    final note = notes[index];
-                    return GestureDetector(
-                      onLongPress: (){
-                        notesProvider.toggleSelection(note.id!);
-                      },
-                      child:Stack(
-                        children: [
+                            title:Text(
 
-                    Card(
-                        color:notesProvider.selectedNotes.contains(note.id!) ? Colors.blueGrey.shade700 : Colors.grey.shade900,
-                        margin: EdgeInsets.all(8),
-                        child: ListTile(
+                              (note.title == null || note.title!.trim().isEmpty) ? 'Untitled' : note.title!,
+                            style: TextStyle(
+                               overflow: TextOverflow.ellipsis,
+                              fontWeight: FontWeight.bold,
+                             fontSize: 20,
+                        color: Colors.white,
+                        ),
+                            ),
+                            subtitle: Text(
+                                (note.content == null || note.content!.trim().isEmpty) ? 'No content' : note.content!,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.grey.shade500,
+                            ),
+                            maxLines: 5,
+                            overflow: TextOverflow.ellipsis),
+                         onTap: (){
+                              if(notesProvider.selectionMode){
+                                notesProvider.toggleSelection(note.id!);
 
-                          title:Text(
+                              }else {
+                                notesProvider.setCurrentNote(note);
+                                print("tapped ${note.title} ${note.content}");
+                                Navigator.push(
+                                  context,
 
-                            (note.title == null || note.title!.trim().isEmpty) ? 'Untitled' : note.title!,
-                          style: TextStyle(
-                             overflow: TextOverflow.ellipsis,
-                            fontWeight: FontWeight.bold,
-                           fontSize: 20,
-                      color: Colors.white,
-                      ),
+                                  MaterialPageRoute(builder: (_) => notetaker()
+                                  ),
+                                );
+                              }
+                         },
+
                           ),
-                          subtitle: Text(
-                              (note.content == null || note.content!.trim().isEmpty) ? 'No content' : note.content!,
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.grey.shade500,
-                          ),
-                          maxLines: 5,
-                          overflow: TextOverflow.ellipsis),
-                       onTap: (){
-                            if(notesProvider.selectionMode){
-                              notesProvider.toggleSelection(note.id!);
-
-                            }else {
-                              notesProvider.setCurrentNote(note);
-                              print("tapped ${note.title} ${note.content}");
-                              Navigator.push(
-                                context,
-
-                                MaterialPageRoute(builder: (_) => notetaker()
-                                ),
-                              );
-                            }
-                       },
 
                         ),
-
+                      if(notesProvider.selectionMode)
+                      Positioned(
+                      top: 14,
+                      right: 10,
+                      child: Icon(
+                      notesProvider.selectedNotes.contains(note.id!) ? Icons.check_box : Icons.check_box_outline_blank,
+                      size: 15,
+                      color: Colors.white,
                       ),
-                    if(notesProvider.selectionMode)
-                    Positioned(
-                    top: 14,
-                    right: 10,
-                    child: Icon(
-                    notesProvider.selectedNotes.contains(note.id!) ? Icons.check_box : Icons.check_box_outline_blank,
-                    size: 15,
-                    color: Colors.white,
-                    ),
-                    ),
+                      ),
 
-                      ]
-                      )
-                    );
-                  }
-                );
-              }
-            ),
-          )
+                        ]
+                        )
+                      );
+                    }
+                  );
+                }
+              ),
+            )
 
-          ],
+            ],
 
+          ),
         ),
       ),
     ),
@@ -191,6 +197,15 @@ bottomNavigationBar: Consumer<NotesProvider>(
        color: Colors.red,
    ),
          ),
+         IconButton(onPressed: (){}, icon: Icon(Icons.lock_outline,
+         size: 20,
+   )
+         )
+         ,
+         IconButton(onPressed: (){}, icon: Icon(Icons.push_pin_outlined,
+         size: 20,
+   )
+         )
          ]
      )
    );

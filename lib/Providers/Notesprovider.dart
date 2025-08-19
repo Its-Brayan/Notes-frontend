@@ -22,6 +22,10 @@ class NotesProvider with ChangeNotifier{
     }
     notifyListeners();
   }
+  void clearSelection(){
+    _selectedNotes.clear();
+    notifyListeners();
+  }
   Future<bool> createnote(NotesModel notes) async{
     notifyListeners();
     final success = await NotesServices().createnote(notes);

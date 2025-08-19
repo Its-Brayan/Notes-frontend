@@ -97,6 +97,7 @@ class _notetakerState extends State<notetaker> {
                       content: contentController.text,
                     );
                   await  notesProvider.createnote(newnote);
+                  Navigator.pop(context);
                   }else{
                     final updatednote = NotesModel(
                       id: notesProvider.currentnote!.id,

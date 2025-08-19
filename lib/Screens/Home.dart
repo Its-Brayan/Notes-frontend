@@ -91,8 +91,10 @@ class _HomeState extends State<Home> {
 
                         },
                         title:Text(
+
                           (note.title == null || note.title!.trim().isEmpty) ? 'Untitled' : note.title!,
                         style: TextStyle(
+                           overflow: TextOverflow.ellipsis,
                           fontWeight: FontWeight.bold,
                          fontSize: 20,
                     color: Colors.white,

@@ -35,12 +35,16 @@ class _notetakerState extends State<notetaker> {
         children: [
           ListTile(
          leading: IconButton(onPressed: () async {
-           if(titleController.text.trim().isEmpty && contentController.text.trim().isEmpty){
-             await notesProvider.deletenote(notesProvider.currentnote!.id!);
-             Navigator.pop(context);
-
-             return;
+           final title = titleController.text;
+           final content = contentController.text;
+           if(notesProvider.currentnote == null){
+              if(title.trim().isEmpty && content.trim().isEmpty){
+                Navigator.pop(context);
+                return;
+              }
            }
+
+
            if(notesProvider.currentnote == null){
              final newnote = NotesModel(
 
@@ -51,6 +55,12 @@ class _notetakerState extends State<notetaker> {
              await notesProvider.createnote(newnote);
 
            }else{
+             if(titleController.text.trim().isEmpty && contentController.text.trim().isEmpty){
+               await notesProvider.deletenote(notesProvider.currentnote!.id!);
+               Navigator.pop(context);
+               return;
+             }
+             else{
              final updatednote = NotesModel(
                id: notesProvider.currentnote!.id,
                title: titleController.text,
@@ -58,6 +68,7 @@ class _notetakerState extends State<notetaker> {
              );
 
              await notesProvider.updatenote(updatednote);
+             }
            }
            Navigator.pop(context);
          }, icon:Icon(Icons.arrow_back,

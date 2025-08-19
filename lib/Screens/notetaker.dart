@@ -30,7 +30,7 @@ class _notetakerState extends State<notetaker> {
   Widget build(BuildContext context) {
     final notesProvider = Provider.of<NotesProvider>(context);
     return  Scaffold(
-      backgroundColor: Colors.black54,
+      backgroundColor: Colors.black,
       body: SafeArea(child: Column(
         children: [
           ListTile(

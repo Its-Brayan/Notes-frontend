@@ -29,9 +29,9 @@ class MyApp extends StatelessWidget {
         '/takenotes':(context) => notetaker(),
       },
       title: 'Flutter Demo',
-      theme: ThemeData(
-       
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+      theme: ThemeData.dark().copyWith(
+        scaffoldBackgroundColor: Colors.black54,
+
 
       ),
   home: splashscreen(),

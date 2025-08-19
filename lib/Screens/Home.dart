@@ -21,7 +21,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      backgroundColor: Colors.black54,
+      backgroundColor: Colors.black,
     body: GestureDetector(
       onTap: (){
         final notesProvider = Provider.of<NotesProvider>(context, listen: false);
@@ -142,9 +142,9 @@ class _HomeState extends State<Home> {
                       top: 14,
                       right: 10,
                       child: Icon(
-                      notesProvider.selectedNotes.contains(note.id!) ? Icons.check_box : Icons.check_box_outline_blank,
+                      notesProvider.selectedNotes.contains(note.id!) ? Icons.check_circle_rounded : Icons.circle_outlined,
                       size: 15,
-                      color: Colors.white,
+                      color: notesProvider.selectedNotes.contains(note.id!) ? Colors.orange : Colors.white,
                       ),
                       ),
 

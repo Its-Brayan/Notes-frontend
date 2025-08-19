@@ -70,6 +70,22 @@ if(response.statusCode==200){
     }
 
   }
+  Future<bool> deleteNote(int noteid) async{
+    final response = await http.delete(
+      Uri.parse('$baseUrl/update_note/$noteid/'),
+      headers:{
+        'Content-Type':'application/json'
+      },
+    );
+    if(response.statusCode==204){
+      print("Note deleted");
+      return true;
+    }else{
+      print("Error deleting the note");
+      return false;
+    }
+
+    }
 }
 
 

@@ -87,6 +87,10 @@ class _HomeState extends State<Home> {
                       color:Colors.grey.shade900,
                       margin: EdgeInsets.all(8),
                       child: ListTile(
+                        onLongPress: ()async{
+                          await notesProvider.deletenote(note.id!);
+                          notesProvider.getNotes();
+                        },
                         title:Text(note.title ?? "Untitled",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,

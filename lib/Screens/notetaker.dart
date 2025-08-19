@@ -54,6 +54,7 @@ class _notetakerState extends State<notetaker> {
                title: titleController.text,
                content: contentController.text,
              );
+
              await notesProvider.updatenote(updatednote);
            }
            Navigator.pop(context);
@@ -72,6 +73,10 @@ class _notetakerState extends State<notetaker> {
                 ),
                 ),
                 IconButton(onPressed: () async{
+                  if(titleController.text.trim().isEmpty && contentController.text.trim().isEmpty){
+                    Navigator.pop(context);
+                    return;
+                  }
                   if(notesProvider.currentnote == null) {
                     final newnote = NotesModel(
                       title: titleController.text,
@@ -85,6 +90,7 @@ class _notetakerState extends State<notetaker> {
                       content: contentController.text,
                     );
                    await notesProvider.updatenote(updatednote);
+                   Navigator.pop(context);
                   }
                 }, icon:Icon(Icons.check_circle_outline,
                 color: Colors.white,

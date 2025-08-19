@@ -71,4 +71,15 @@ Future<void> getnotebyid(int noteid) async{
     return notes;
   }
 
+  Future<bool> deletenote(int noteid) async{
+    final success = await NotesServices().deleteNote(noteid);
+    if(success){
+      _notes.removeWhere((n) => n.id == noteid);
+      notifyListeners();
+      return true;
+    }else{
+      notifyListeners();
+      return false;
+    }
+  }
   }

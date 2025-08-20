@@ -65,6 +65,8 @@ class _notetakerState extends State<notetaker> {
                id: notesProvider.currentnote!.id,
                title: titleController.text,
                content: contentController.text,
+               pinned: notesProvider.currentnote!.pinned,
+               createdAt: notesProvider.currentnote!.createdAt,
              );
 
              await notesProvider.updatenote(updatednote);

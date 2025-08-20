@@ -19,6 +19,7 @@ class NotesProvider with ChangeNotifier{
    final notesIndex = _notes.indexWhere((note) => note.id == noteId);
    if(notesIndex != -1){
      _notes[notesIndex].pinned = !_notes[notesIndex].pinned!;
+     notifyListeners();
      _notes.sort((a, b) {
        final aPinned = a.pinned ?? false;
        final bPinned = b.pinned ?? false;

@@ -135,7 +135,7 @@ class _HomeState extends State<Home> {
                                 );
                               }
                          },
-                           trailing: note.pinned == true ? Icon(Icons.push_pin_outlined,
+                           trailing: (note.pinned ?? false) ?Icon(Icons.push_pin_outlined,
                            color: Colors.orange,) : null,
                           ),
 
@@ -191,21 +191,28 @@ bottomNavigationBar: Consumer<NotesProvider>(
      child: Row(
        mainAxisAlignment: MainAxisAlignment.spaceAround,
        children: [
-         IconButton(onPressed: (){
+         IconButton(
+           tooltip: "delete",
+           onPressed: (){
            notesProvider.selectedNotes.forEach((noteId) {
              notesProvider.deletenote(noteId);
            });
             notesProvider.selectedNotes.clear();
          }, icon: Icon(Icons.delete,
+
        color: Colors.red,
    ),
          ),
-         IconButton(onPressed: (){}, icon: Icon(Icons.lock_outline,
+         IconButton(
+           tooltip: "Lock",
+             onPressed: (){}, icon: Icon(Icons.lock_outline,
          size: 20,
    )
          )
          ,
-         IconButton(onPressed: (){
+         IconButton(
+           tooltip: "Pin a note",
+             onPressed: (){
            notesProvider.selectedNotes.forEach((noteId) {
              notesProvider.togglePin(noteId);
            });

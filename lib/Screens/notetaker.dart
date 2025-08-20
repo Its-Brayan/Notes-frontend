@@ -78,10 +78,12 @@ class _notetakerState extends State<notetaker> {
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                IconButton(onPressed: (){
+                IconButton(onPressed: notesProvider.currentnote == null ? null : (){
                   notesProvider.togglePin(notesProvider.currentnote!.id!);
+
+
                 }, icon:Icon(Icons.push_pin_outlined,
-                color:notesProvider.currentnote!.pinned == true ? Colors.orange : Colors.white)
+                color:notesProvider.currentnote?.pinned == true ? Colors.orange : Colors.white)
                 ),
                 IconButton(onPressed: (){}, icon:Icon(Icons.lock_outline,
                   color: Colors.white,

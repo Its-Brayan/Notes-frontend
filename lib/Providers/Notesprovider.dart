@@ -104,7 +104,7 @@ Future<void> getnotebyid(int noteid) async{
       final bPinned = b.pinned ?? false;
       if(aPinned && !bPinned) return -1;
       if(!aPinned && bPinned) return 1;
-      return a.createdAt!.compareTo(b.createdAt!);
+      return a.createdAt.compareTo(b.createdAt);
     });
     notifyListeners();
     return notes;

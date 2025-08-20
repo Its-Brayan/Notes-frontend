@@ -65,11 +65,8 @@ class _HomeState extends State<Home> {
                  )
              ),
               SizedBox(height: 10),
-              Divider(
 
-                color: Colors.grey.shade100,
-              ),
-              SizedBox(height: 30),
+              SizedBox(height: 10),
 
             Expanded(
               child: Consumer<NotesProvider>(
@@ -85,7 +82,7 @@ class _HomeState extends State<Home> {
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: 2,
-                      mainAxisSpacing: 2,
+                      mainAxisSpacing: 0,
                     ),
                   itemCount: notes.length,
                     itemBuilder: (context,index) {
@@ -97,49 +94,52 @@ class _HomeState extends State<Home> {
                         child:Stack(
                           children: [
 
-                      Card(
-                          color:notesProvider.selectedNotes.contains(note.id!) ? Colors.blueGrey.shade700 : Colors.grey.shade900,
-                          margin: EdgeInsets.all(8),
-                          child: ListTile(
+                      SizedBox(
+                        height: 180,
+                        child: Card(
+                            color:notesProvider.selectedNotes.contains(note.id!) ? Colors.blueGrey.shade700 : Colors.grey.shade900,
+                            margin: EdgeInsets.all(8),
+                            child: ListTile(
 
-                            title:Text(
+                              title:Text(
 
-                              (note.title == null || note.title!.trim().isEmpty) ? 'Untitled' : note.title!,
-                            style: TextStyle(
-                               overflow: TextOverflow.ellipsis,
-                              fontWeight: FontWeight.bold,
-                             fontSize: 20,
-                        color: Colors.white,
-                        ),
-                            ),
-                            subtitle: Text(
-                                (note.content == null || note.content!.trim().isEmpty) ? 'No content' : note.content!,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey.shade500,
-                            ),
-                            maxLines: 5,
-                            overflow: TextOverflow.ellipsis),
-                         onTap: (){
-                              if(notesProvider.selectionMode){
-                                notesProvider.toggleSelection(note.id!);
-
-                              }else {
-                                notesProvider.setCurrentNote(note);
-                                print("tapped ${note.title} ${note.content}");
-                                Navigator.push(
-                                  context,
-
-                                  MaterialPageRoute(builder: (_) => notetaker()
-                                  ),
-                                );
-                              }
-                         },
-                           trailing: (note.pinned ?? false) ?Icon(Icons.push_pin_outlined,
-                           color: Colors.orange,) : null,
+                                (note.title == null || note.title!.trim().isEmpty) ? 'Untitled' : note.title!,
+                              style: TextStyle(
+                                 overflow: TextOverflow.ellipsis,
+                                fontWeight: FontWeight.bold,
+                               fontSize: 20,
+                          color: Colors.white,
                           ),
+                              ),
+                              subtitle: Text(
+                                  (note.content == null || note.content!.trim().isEmpty) ? 'No content' : note.content!,
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.grey.shade500,
+                              ),
+                              maxLines: 5,
+                              overflow: TextOverflow.ellipsis),
+                           onTap: (){
+                                if(notesProvider.selectionMode){
+                                  notesProvider.toggleSelection(note.id!);
 
-                        ),
+                                }else {
+                                  notesProvider.setCurrentNote(note);
+                                  print("tapped ${note.title} ${note.content}");
+                                  Navigator.push(
+                                    context,
+
+                                    MaterialPageRoute(builder: (_) => notetaker()
+                                    ),
+                                  );
+                                }
+                           },
+                             trailing: (note.pinned ?? false) ?Icon(Icons.push_pin_outlined,
+                             color: Colors.orange,) : null,
+                            ),
+
+                          ),
+                      ),
                       if(notesProvider.selectionMode)
                       Positioned(
                       top: 14,

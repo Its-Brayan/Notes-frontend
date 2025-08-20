@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:notes/Providers/Notesprovider.dart';
 import 'package:notes/Screens/Settings/settings.dart';
 import 'package:notes/Screens/Settings/about.dart';
+import 'package:notes/Screens/Auth/usernamepage.dart';
 
 void main() {
   runApp(
@@ -31,10 +32,15 @@ class MyApp extends StatelessWidget {
         '/takenotes':(context) => notetaker(),
         '/settings':(context) => settings(),
         '/about':(context) => about(),
+        '/username':(context) => usernamepage(),
       },
       title: 'Flutter Demo',
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: Colors.black54,
+       colorScheme: ColorScheme.dark(
+         primary: Colors.orange,
+         secondary: Colors.orange,
+       ),
 
 
       ),

@@ -3,6 +3,7 @@ import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:notes/Screens/Home.dart';
+import 'package:notes/Screens/Auth/usernamepage.dart';
 class splashscreen extends StatelessWidget {
   const splashscreen({super.key});
 
@@ -12,7 +13,7 @@ class splashscreen extends StatelessWidget {
 
       child:Lottie.asset('assets/animation.json')
     ),
-        nextScreen: Home(),
+        nextScreen: usernamepage(),
       splashIconSize: 200,
       backgroundColor: Colors.black54,
       duration: 5000,

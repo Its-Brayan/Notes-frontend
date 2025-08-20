@@ -18,6 +18,9 @@ appBar: AppBar(
             title: Text('Change 4-Digit pin'),
           ),
           ListTile(
+            onTap: (){
+              Navigator.pushNamed(context, '/about');
+            },
             leading:Icon(
               CupertinoIcons.exclamationmark_circle,
 

@@ -5,6 +5,7 @@ import 'package:notes/Screens/Splash/splashscreen.dart';
 import 'package:notes/Screens/notetaker.dart';
 import 'package:provider/provider.dart';
 import 'package:notes/Providers/Notesprovider.dart';
+import 'package:notes/Screens/Settings/settings.dart';
 
 void main() {
   runApp(
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/home':(context) => Home(),
         '/takenotes':(context) => notetaker(),
+        '/settings':(context) => settings(),
       },
       title: 'Flutter Demo',
       theme: ThemeData.dark().copyWith(

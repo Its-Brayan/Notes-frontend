@@ -56,7 +56,9 @@ class _HomeState extends State<Home> {
 
                      IconButton(onPressed: (){}, icon:Icon(Icons.search),
                      ),
-                     IconButton(onPressed: (){}, icon:Icon(Icons.settings),
+                     IconButton(onPressed: (){
+                       Navigator.pushNamed(context, '/settings');
+                     }, icon:Icon(Icons.settings),
                      ),
 
                      ]

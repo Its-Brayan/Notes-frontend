@@ -94,8 +94,10 @@ class _HomeState extends State<Home> {
                         child:Stack(
                           children: [
 
-                      SizedBox(
-                        height: 180,
+                      ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: 150,
+                        ),
                         child: Card(
                             color:notesProvider.selectedNotes.contains(note.id!) ? Colors.blueGrey.shade700 : Colors.grey.shade900,
                             margin: EdgeInsets.all(8),

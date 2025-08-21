@@ -1,6 +1,19 @@
 import 'package:flutter/material.dart';
-class usernamepage extends StatelessWidget {
+import 'package:shared_preferences/shared_preferences.dart';
+class usernamepage extends StatefulWidget {
   const usernamepage({super.key});
+
+  @override
+  State<usernamepage> createState() => _usernamepageState();
+}
+
+class _usernamepageState extends State<usernamepage> {
+  final TextEditingController _controller = TextEditingController();
+  Future<void> _saveUsername() async{
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setString('username', _controller.text);
+  Navigator.pushReplacementNamed(context, '/home');
+}
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +34,8 @@ class usernamepage extends StatelessWidget {
          Padding(
            padding: const EdgeInsets.all(15.0),
            child: Form(child: TextFormField(
+             controller: _controller,
+
              decoration: InputDecoration(
                border:OutlineInputBorder(
                  borderRadius: BorderRadius.circular(40),
@@ -45,7 +60,8 @@ class usernamepage extends StatelessWidget {
                minimumSize: Size(350, 50),
              ),
                onPressed: (){
-             Navigator.pushNamed(context, '/home');
+               _saveUsername();
+
            }, child: Text("Continue"))
            ]
        ),

@@ -6,6 +6,7 @@ plugins {
 }
 
 android {
+
     namespace = "com.example.notes"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion

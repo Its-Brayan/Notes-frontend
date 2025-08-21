@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:notes/Providers/Notesprovider.dart';
 import 'package:notes/Models/NotesModel.dart';
 import 'package:notes/Screens/notetaker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -11,11 +12,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String username = '';
+
   void initState(){
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Provider.of<NotesProvider>(context, listen: false).getNotes();
     });
+    _loadUsername();
+  }
+  void _loadUsername() async{
+    final prefs = await SharedPreferences.getInstance();
+      setState(() {
+        username = prefs.getString('username') ?? '';
+    });
+
   }
   @override
   Widget build(BuildContext context) {
@@ -43,7 +54,7 @@ class _HomeState extends State<Home> {
                    fit: BoxFit.cover,
                  ),
                ),
-               title: Text('Hello Brayan',
+               title: Text('Hello $username',
                style: TextStyle(
                  color: Colors.white,
                  fontWeight: FontWeight.bold,

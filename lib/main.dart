@@ -8,25 +8,30 @@ import 'package:notes/Providers/Notesprovider.dart';
 import 'package:notes/Screens/Settings/settings.dart';
 import 'package:notes/Screens/Settings/about.dart';
 import 'package:notes/Screens/Auth/usernamepage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final username = prefs.getString('username');
 
-void main() {
   runApp(
       ChangeNotifierProvider(
         create: (context) => NotesProvider(),
-        child:  const MyApp()
+        child:   MyApp(isNewUser: username == null)
     )
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final bool isNewUser;
+  const MyApp({super.key, required this.isNewUser});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-
+   initialRoute: isNewUser ? '/username' : '/home',
       routes: {
         '/home':(context) => Home(),
         '/takenotes':(context) => notetaker(),

@@ -12,6 +12,44 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Future<String?> _askForPin(BuildContext context) async{
+    String pin = '';
+    return showDialog<String>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Enter Pin'),
+          content: TextField(
+            keyboardType: TextInputType.number,
+            maxLength: 4,
+            obscureText: true,
+            decoration: InputDecoration(
+              hintText: 'Enter Pin',
+            ),
+            onChanged: (value) {
+              pin = value;
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, null);
+              },
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, pin);
+              },
+              child: Text('OK'),
+            ),
+          ],
+
+      );
+      },
+
+    );
+  }
   String username = '';
 
   void initState(){
@@ -132,11 +170,30 @@ class _HomeState extends State<Home> {
                               ),
                               maxLines: 5,
                               overflow: TextOverflow.ellipsis),
-                           onTap: (){
+                           onTap: () async{
                                 if(notesProvider.selectionMode){
                                   notesProvider.toggleSelection(note.id!);
 
-                                }else {
+                                }
+                                else if(note.locked){
+                                    final enteredPin = await _askForPin(context);
+                                    if(enteredPin == note.pincode){
+                                      notesProvider.setCurrentNote(note);
+                                      print("tapped ${note.title} ${note.content}");
+                                      Navigator.push(
+                                        context,
+                                          MaterialPageRoute(builder: (_) => notetaker()),
+                                      );
+                                    }else{
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text('Invalid pin'),
+                                          duration: Duration(seconds: 2),
+                                        ),
+                                      );
+                                    }
+                                  }
+                                else {
                                   notesProvider.setCurrentNote(note);
                                   print("tapped ${note.title} ${note.content}");
                                   Navigator.push(
@@ -218,7 +275,22 @@ bottomNavigationBar: Consumer<NotesProvider>(
          ),
          IconButton(
            tooltip: "Lock",
-             onPressed: (){}, icon: Icon(Icons.lock_outline,
+             onPressed: () async{
+             final pin = await _askForPin(context);
+             if(pin != null && pin.length == 4){
+               notesProvider.selectedNotes.forEach((noteId) {
+                 notesProvider.lockNote(noteId, pin);
+               });
+               notesProvider.selectedNotes.clear();
+             }else{
+               ScaffoldMessenger.of(context).showSnackBar(
+                 SnackBar(
+                   content: Text('Invalid pin'),
+                   duration: Duration(seconds: 2),
+                 ),
+               );
+             }
+             }, icon: Icon(Icons.lock_outline,
          size: 20,
    )
          )

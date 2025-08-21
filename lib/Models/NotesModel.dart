@@ -5,15 +5,19 @@ class NotesModel{
   String? title;
   String? content;
   bool? pinned ;
+  bool locked;
+  String? pincode;
   DateTime createdAt;
 
-  NotesModel({this.id,this.title,this.content,this.pinned = false,DateTime? createdAt,}) : createdAt = createdAt ?? DateTime.now();
+  NotesModel({this.id,this.title,this.content,this.pinned = false,this.locked = false,this.pincode,DateTime? createdAt,}) : createdAt = createdAt ?? DateTime.now();
   Map<String,dynamic> toJson(){
     return{
       'id':id,
       'title':title,
       'content':content,
       'pinned':pinned,
+      'locked':locked,
+      'pincode':pincode,
       'createdAt':createdAt.toIso8601String(),
     };
   }
@@ -22,6 +26,8 @@ class NotesModel{
     title = json['title'],
     content = json['content'],
     pinned = json['pinned'] ?? false,
+    locked = json['locked'] ?? false,
+    pincode = json['pincode'],
     createdAt = DateTime.tryParse(json['createdAt']?? '') ?? DateTime.now();
 
 

@@ -122,4 +122,12 @@ Future<void> getnotebyid(int noteid) async{
       return false;
     }
   }
+  void lockNote(int NoteId,String pin){
+    final notesIndex = _notes.indexWhere((n) => n.id == NoteId);
+    if(notesIndex != -1){
+      _notes[notesIndex].locked = true;
+      _notes[notesIndex].pincode = pin;
+      notifyListeners();
+    }
+  }
   }

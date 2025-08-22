@@ -4,6 +4,7 @@ import 'package:notes/Providers/Notesprovider.dart';
 import 'package:notes/Models/NotesModel.dart';
 import 'package:notes/Screens/notetaker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:ui';
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -150,62 +151,84 @@ class _HomeState extends State<Home> {
                         child: Card(
                             color:notesProvider.selectedNotes.contains(note.id!) ? Colors.blueGrey.shade700 : Colors.grey.shade900,
                             margin: EdgeInsets.all(8),
-                            child: ListTile(
+                            child: Stack(
+                              children: [
+                          ListTile(
 
-                              title:Text(
+                                title:Text(
 
-                                (note.title == null || note.title!.trim().isEmpty) ? 'Untitled' : note.title!,
-                              style: TextStyle(
-                                 overflow: TextOverflow.ellipsis,
-                                fontWeight: FontWeight.bold,
-                               fontSize: 20,
-                          color: Colors.white,
-                          ),
-                              ),
-                              subtitle: Text(
-                                  (note.content == null || note.content!.trim().isEmpty) ? 'No content' : note.content!,
-                              style: TextStyle(
-                                fontSize: 15,
-                                color: Colors.grey.shade500,
-                              ),
-                              maxLines: 5,
-                              overflow: TextOverflow.ellipsis),
-                           onTap: () async{
-                                if(notesProvider.selectionMode){
-                                  notesProvider.toggleSelection(note.id!);
+                                  (note.title == null || note.title!.trim().isEmpty) ? 'Untitled' : note.title!,
+                                style: TextStyle(
+                                   overflow: TextOverflow.ellipsis,
+                                  fontWeight: FontWeight.bold,
+                                 fontSize: 20,
+                                                        color: Colors.white,
+                                                        ),
+                                ),
+                                subtitle: Text(
+                                    (note.content == null || note.content!.trim().isEmpty) ? 'No content' : note.content!,
+                                style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.grey.shade500,
+                                ),
+                                maxLines: 5,
+                                overflow: TextOverflow.ellipsis),
+                                                         onTap: () async{
+                                  if(notesProvider.selectionMode){
+                                    notesProvider.toggleSelection(note.id!);
 
-                                }
-                                else if(note.locked){
-                                    final enteredPin = await _askForPin(context);
-                                    if(enteredPin == note.pincode){
-                                      notesProvider.setCurrentNote(note);
-                                      print("tapped ${note.title} ${note.content}");
-                                      Navigator.push(
-                                        context,
-                                          MaterialPageRoute(builder: (_) => notetaker()),
-                                      );
-                                    }else{
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text('Invalid pin'),
-                                          duration: Duration(seconds: 2),
-                                        ),
-                                      );
-                                    }
                                   }
-                                else {
-                                  notesProvider.setCurrentNote(note);
-                                  print("tapped ${note.title} ${note.content}");
-                                  Navigator.push(
-                                    context,
+                                  else if(note.locked){
+                                      final enteredPin = await _askForPin(context);
+                                      if(enteredPin == note.pincode){
+                                        notesProvider.setCurrentNote(note);
+                                        print("tapped ${note.title} ${note.content}");
+                                        Navigator.push(
+                                          context,
+                                            MaterialPageRoute(builder: (_) => notetaker()),
+                                        );
+                                      }else{
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text('Invalid pin'),
+                                            duration: Duration(seconds: 2),
+                                          ),
+                                        );
+                                      }
+                                    }
+                                  else {
+                                    notesProvider.setCurrentNote(note);
+                                    print("tapped ${note.title} ${note.content}");
+                                    Navigator.push(
+                                      context,
 
-                                    MaterialPageRoute(builder: (_) => notetaker()
-                                    ),
-                                  );
-                                }
-                           },
-                             trailing: (note.pinned ?? false) ?Icon(Icons.push_pin_outlined,
-                             color: Colors.orange,) : null,
+                                      MaterialPageRoute(builder: (_) => notetaker()
+                                      ),
+                                    );
+                                  }
+                                                         },
+                               trailing: (note.pinned ?? false) ?Icon(Icons.push_pin_outlined,
+                               color: Colors.orange,) : null,
+
+                              ),
+                                if(note.locked) Positioned.fill(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child:BackdropFilter(
+                                      filter:ImageFilter.blur(sigmaX:6,sigmaY:6),
+                                      child: Container(
+                                      color: Colors.black.withOpacity(0.5),
+                                        alignment: Alignment.center,
+                                        child: Icon(Icons.lock,
+                                        color: Colors.white,
+                                        size: 40,
+                                        ),
+                                      )
+
+                                    )
+                                  )
+                                )
+                      ]
                             ),
 
                           ),

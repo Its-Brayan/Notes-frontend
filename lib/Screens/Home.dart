@@ -18,7 +18,7 @@ class _HomeState extends State<Home> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Enter Pin'),
+          title: Text('Enter Password'),
           content: TextField(
             keyboardType: TextInputType.number,
             maxLength: 4,
@@ -285,7 +285,7 @@ bottomNavigationBar: Consumer<NotesProvider>(
              }else{
                ScaffoldMessenger.of(context).showSnackBar(
                  SnackBar(
-                   content: Text('Invalid pin'),
+                   content: Text('Enter a valid 4-Digit pin'),
                    duration: Duration(seconds: 2),
                  ),
                );

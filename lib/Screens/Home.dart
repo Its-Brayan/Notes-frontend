@@ -13,6 +13,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Future<void> setGlobalPassword(String password) async{
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('global_password', password);
+  }
+  Future<String?> getGlobalPassword() async{
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('global_password');
+  }
   Future<String?> _askForPin(BuildContext context) async{
     String pin = '';
     return showDialog<String>(
@@ -178,24 +186,48 @@ class _HomeState extends State<Home> {
                                     notesProvider.toggleSelection(note.id!);
 
                                   }
-                                  else if(note.locked){
-                                      final enteredPin = await _askForPin(context);
-                                      if(enteredPin == note.pincode){
-                                        notesProvider.setCurrentNote(note);
-                                        print("tapped ${note.title} ${note.content}");
-                                        Navigator.push(
-                                          context,
-                                            MaterialPageRoute(builder: (_) => notetaker()),
-                                        );
-                                      }else{
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(
-                                            content: Text('Invalid pin'),
-                                            duration: Duration(seconds: 2),
-                                          ),
-                                        );
-                                      }
+                                  else if(note.locked && !note.unlocked) {
+                                    final savedPassword = await getGlobalPassword();
+                                    if (savedPassword == null) {
+                                      ScaffoldMessenger
+                                          .of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(
+                                              'No password set, please set it in settings'),
+                                          duration: Duration(seconds: 2),
+                                        ),
+                                      );
+                                      return;
                                     }
+                                    final enteredPin = await _askForPin(
+                                        context);
+                                    if (enteredPin == savedPassword) {
+                                      setState(() {
+                                        note.unlocked = true;
+                                      });
+                                      ScaffoldMessenger
+                                          .of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text(' Note Unlocked'),
+                                          duration: Duration(seconds: 2),
+                                        ),
+                                      );
+                                      notesProvider.setCurrentNote(note);
+                                    }
+                                    else {
+                                      ScaffoldMessenger
+                                          .of(context)
+                                          .showSnackBar(
+                                        SnackBar(
+                                          content: Text('Invalid pin'),
+                                          duration: Duration(seconds: 2),
+                                        ),
+                                      );
+                                    }
+
+                                  }
                                   else {
                                     notesProvider.setCurrentNote(note);
                                     print("tapped ${note.title} ${note.content}");

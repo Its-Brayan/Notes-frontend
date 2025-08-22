@@ -212,20 +212,22 @@ class _HomeState extends State<Home> {
 
                               ),
                                 if(note.locked) Positioned.fill(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(10),
-                                    child:BackdropFilter(
-                                      filter:ImageFilter.blur(sigmaX:6,sigmaY:6),
-                                      child: Container(
-                                      color: Colors.black.withOpacity(0.5),
-                                        alignment: Alignment.center,
-                                        child: Icon(Icons.lock,
-                                        color: Colors.white,
-                                        size: 40,
-                                        ),
+                                  child: IgnorePointer(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(10),
+                                      child:BackdropFilter(
+                                        filter:ImageFilter.blur(sigmaX:6,sigmaY:6),
+                                        child: Container(
+                                        color: Colors.black.withOpacity(0.5),
+                                          alignment: Alignment.center,
+                                          child: Icon(Icons.lock,
+                                          color: Colors.white,
+                                          size: 40,
+                                          ),
+                                        )
+                                    
                                       )
-
-                                    )
+                                    ),
                                   )
                                 )
                       ]

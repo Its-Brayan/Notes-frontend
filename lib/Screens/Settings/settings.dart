@@ -15,6 +15,10 @@ appBar: AppBar(
         children: [
           ListTile(
             leading: Icon(Icons.fingerprint_outlined),
+            title: Text('Set 4-Digit pin'),
+          ),
+          ListTile(
+            leading: Icon(Icons.fingerprint_outlined),
             title: Text('Change 4-Digit pin'),
           ),
           ListTile(

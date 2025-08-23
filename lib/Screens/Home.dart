@@ -186,47 +186,22 @@ class _HomeState extends State<Home> {
                                     notesProvider.toggleSelection(note.id!);
 
                                   }
-                                  else if(note.locked && !note.unlocked) {
-                                    final savedPassword = await getGlobalPassword();
-                                    if (savedPassword == null) {
-                                      ScaffoldMessenger
-                                          .of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                              'No password set, please set it in settings'),
-                                          duration: Duration(seconds: 2),
-                                        ),
-                                      );
-                                      return;
-                                    }
-                                    final enteredPin = await _askForPin(
-                                        context);
-                                    if (enteredPin == savedPassword) {
-                                      setState(() {
-                                        note.unlocked = true;
-                                      });
-                                      ScaffoldMessenger
-                                          .of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text(' Note Unlocked'),
-                                          duration: Duration(seconds: 2),
-                                        ),
-                                      );
-                                      notesProvider.setCurrentNote(note);
-                                    }
-                                    else {
-                                      ScaffoldMessenger
-                                          .of(context)
-                                          .showSnackBar(
-                                        SnackBar(
-                                          content: Text('Invalid pin'),
-                                          duration: Duration(seconds: 2),
-                                        ),
-                                      );
-                                    }
+                                     else if(note.locked){
+                                       final enteredPin = await _askForPin(context);
+                                       if(enteredPin !=null){
+                                         bool success = await notesProvider.unlockNote(note.id!,enteredPin);
+                                         if(success){
+                                           notesProvider.toggleSelection(note.id!);
+                                         }
+                                       }else{
+                                         ScaffoldMessenger.of(context).showSnackBar(
+                                           SnackBar(
+                                             content: Text('Enter a valid 4-Digit pin'),
+                                             duration: Duration(seconds: 2),
+                                           ),
+                                         );
 
+                                       }
                                   }
                                   else {
                                     notesProvider.setCurrentNote(note);
@@ -336,7 +311,7 @@ bottomNavigationBar: Consumer<NotesProvider>(
              final pin = await _askForPin(context);
              if(pin != null && pin.length == 4){
                notesProvider.selectedNotes.forEach((noteId) {
-                 notesProvider.lockNote(noteId, pin);
+                 notesProvider.lockNoteById(noteId, pin);
                });
                notesProvider.selectedNotes.clear();
              }else{

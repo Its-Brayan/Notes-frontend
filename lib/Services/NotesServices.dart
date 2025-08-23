@@ -86,6 +86,36 @@ if(response.statusCode==200){
     }
 
     }
+    Future<void> lockNote(int noteid,String pin) async{
+      final response = await http.post(
+        Uri.parse('$baseUrl/update_note/$noteid/'),
+        headers:{
+          'Content-Type':'application/json'
+        },
+      );
+      if(response.statusCode==201){
+        print("Note locked");
+        print(response.body);
+      }else{
+        print("Error locking the note");
+      }
+
+    }
+    Future<void> unlockNote(int noteid) async {
+      final response = await http.post(
+        Uri.parse('$baseUrl/update_note/$noteid/'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+      if (response.statusCode == 201) {
+        print("Note unlocked");
+        print(response.body);
+      } else {
+        print("Error unlocking the note");
+      }
+
+    }
 }
 
 

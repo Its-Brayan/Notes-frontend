@@ -130,6 +130,26 @@ Future<void> getnotebyid(int noteid) async{
       notifyListeners();
     }
   }
+  Future<void> unlockNote(int noteid, String pin) async {
+    final bool success = await NotesServices().unlockNote(noteid,pin);
+    if (success) {
+      final notesIndex = _notes.indexWhere((n) => n.id == noteid);
+      if (notesIndex != -1) {
+        _notes[notesIndex].locked = false;
+        _notes[notesIndex].pincode = null;
+        notifyListeners();
+      }
+    }
+  }
+  Future<void> lockNoteById(int noteId, String pin) async {
+   bool success = await NotesServices().lockNote(noteId, pin);
+   if (success) {
+     final notesIndex = _notes.indexWhere((n) => n.id == noteId);
+     if (notesIndex != -1) {
+       _notes[notesIndex].locked = true;
+       notifyListeners();
+     }
+   }
 
 
   }

@@ -86,33 +86,43 @@ if(response.statusCode==200){
     }
 
     }
-    Future<void> lockNote(int noteid,String pin) async{
+    Future<bool> lockNote(int noteid,String pincode) async{
       final response = await http.post(
         Uri.parse('$baseUrl/update_note/$noteid/'),
         headers:{
           'Content-Type':'application/json'
         },
+        body: jsonEncode({
+          'pincode':pincode
+        })
       );
       if(response.statusCode==201){
         print("Note locked");
         print(response.body);
+        return true;
       }else{
         print("Error locking the note");
+        return false;
       }
 
     }
-    Future<void> unlockNote(int noteid) async {
+    Future<bool> unlockNote(int noteid,String pincode) async {
       final response = await http.post(
         Uri.parse('$baseUrl/update_note/$noteid/'),
         headers: {
           'Content-Type': 'application/json',
         },
+        body: jsonEncode({
+          'pincode': pincode,
+        }),
       );
       if (response.statusCode == 201) {
         print("Note unlocked");
         print(response.body);
+        return true;
       } else {
         print("Error unlocking the note");
+        return false;
       }
 
     }

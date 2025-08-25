@@ -27,11 +27,13 @@ class _notetakerState extends State<notetaker> {
   }
  final TextEditingController titleController = TextEditingController();
 final quill.QuillController _controller = quill.QuillController.basic();
+
 bool _showtoolbar = false;
  final TextEditingController contentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final isKeyboardOpen = MediaQuery.of(context).viewInsets.bottom > 0;
     final notesProvider = Provider.of<NotesProvider>(context);
     return  Scaffold(
       backgroundColor: Colors.black,
@@ -195,7 +197,8 @@ bool _showtoolbar = false;
         },
       ),
       bottomNavigationBar: _showtoolbar
-    ? Container(
+      ?(isKeyboardOpen
+      ? Container(
     color: Colors.grey.shade900,
       height: 55,
       child: ListView(
@@ -219,7 +222,28 @@ bool _showtoolbar = false;
         ],
       ),
     )
-        : null,
+          : Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Container(
+                    color: Colors.grey.shade900,
+                    height: 300, // like a keyboard dock
+                    child: quill.QuillSimpleToolbar(
+            controller: _controller,
+            config: const quill.QuillSimpleToolbarConfig(
+              showBoldButton: true,
+              showItalicButton: true,
+              showUnderLineButton: true,
+              showHeaderStyle: true,
+              showListBullets: true,
+              showListNumbers: true,
+              showQuote: true,
+              showCodeBlock: true,
+            ),
+                    ),
+                  ),
+          ))
+          : null,
+
     );
 
   }

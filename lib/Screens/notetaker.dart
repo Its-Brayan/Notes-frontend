@@ -44,7 +44,7 @@ bool _showtoolbar = false;
           ListTile(
          leading: IconButton(onPressed: () async {
            final title = titleController.text;
-           final content = contentController.text;
+           final content = _controller.document.toPlainText();
            if(notesProvider.currentnote == null){
               if(title.trim().isEmpty && content.trim().isEmpty){
                 Navigator.pop(context);
@@ -57,13 +57,13 @@ bool _showtoolbar = false;
              final newnote = NotesModel(
 
                title: titleController.text,
-               content: contentController.text,
+               content: _controller.document.toPlainText(),
              );
 
              await notesProvider.createnote(newnote);
 
            }else{
-             if(titleController.text.trim().isEmpty && contentController.text.trim().isEmpty){
+             if(titleController.text.trim().isEmpty && _controller.document.toPlainText().trim().isEmpty){
                await notesProvider.deletenote(notesProvider.currentnote!.id!);
                Navigator.pop(context);
                return;
@@ -72,7 +72,7 @@ bool _showtoolbar = false;
              final updatednote = NotesModel(
                id: notesProvider.currentnote!.id,
                title: titleController.text,
-               content: contentController.text,
+               content: _controller.document.toPlainText(),
                pinned: notesProvider.currentnote!.pinned,
                createdAt: notesProvider.currentnote!.createdAt,
              );
@@ -97,7 +97,7 @@ bool _showtoolbar = false;
                 ),
 
                 IconButton(onPressed: () async{
-                  if(titleController.text.trim().isEmpty && contentController.text.trim().isEmpty){
+                  if(titleController.text.trim().isEmpty && _controller.document.toPlainText().trim().isEmpty){
                     await notesProvider.deletenote(notesProvider.currentnote!.id!);
                     Navigator.pop(context);
                     return;
@@ -105,7 +105,7 @@ bool _showtoolbar = false;
                   if(notesProvider.currentnote == null) {
                     final newnote = NotesModel(
                       title: titleController.text,
-                      content: contentController.text,
+                      content: _controller.document.toPlainText(),
                     );
                   await  notesProvider.createnote(newnote);
                   Navigator.pop(context);
@@ -113,7 +113,7 @@ bool _showtoolbar = false;
                     final updatednote = NotesModel(
                       id: notesProvider.currentnote!.id,
                       title: titleController.text.trim().isEmpty ? '' : titleController.text,
-                      content: contentController.text.trim().isEmpty ? '' : contentController.text,
+                      content: _controller.document.toPlainText().trim().isEmpty ? '' : _controller.document.toPlainText(),
                     );
                    await notesProvider.updatenote(updatednote);
                    Navigator.pop(context);
@@ -216,6 +216,10 @@ bool _showtoolbar = false;
               showListNumbers: true,
               showQuote: true,
               showCodeBlock: true,
+              showClipboardPaste: true,
+              showColorButton: true,
+              showFontSize: true,
+
 
             ),
           ),

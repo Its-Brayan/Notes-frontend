@@ -13,6 +13,14 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  @override
+  void initState(){
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<NotesProvider>(context, listen: false).getNotes();
+    });
+    _loadUsername();
+  }
   Future<void> setGlobalPassword(String password) async{
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('global_password', password);
@@ -61,13 +69,7 @@ class _HomeState extends State<Home> {
   }
   String username = '';
 
-  void initState(){
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<NotesProvider>(context, listen: false).getNotes();
-    });
-    _loadUsername();
-  }
+
   void _loadUsername() async{
     final prefs = await SharedPreferences.getInstance();
       setState(() {

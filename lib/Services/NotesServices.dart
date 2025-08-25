@@ -2,7 +2,7 @@ import 'package:notes/Models/NotesModel.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 class NotesServices{
-  final baseUrl = 'http://10.7.5.22:8000';
+  final baseUrl = 'http://10.7.3.19:8000';
   Future<bool> createnote(NotesModel notes) async{
         final response = await http.post(
           Uri.parse('$baseUrl/create_note/'),

@@ -51,6 +51,7 @@ class _settingsState extends State<settings> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Pin set successfully'),
+          backgroundColor: Colors.orange,
           duration: Duration(seconds: 2),
         ),
       );

@@ -10,6 +10,11 @@ class settings extends StatefulWidget {
 }
 
 class _settingsState extends State<settings> {
+  @override
+  void initState() {
+    super.initState();
+    checkPasswordStatus();
+  }
   Future<void> setGlobalPassword(BuildContext context) async{
     String pin = '';
     final enteredPin = await showDialog<String>(
@@ -48,6 +53,10 @@ class _settingsState extends State<settings> {
     if(enteredPin != null && enteredPin.length == 4){
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('global_password', enteredPin);
+      setState(() {
+        hasPassword = true;
+
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Pin set successfully'),
@@ -57,6 +66,19 @@ class _settingsState extends State<settings> {
       );
     }
   }
+  bool hasPassword = false;
+  Future<void> checkPasswordStatus() async{
+    final prefs = await SharedPreferences.getInstance();
+    final globalPassword = prefs.getString('global_password');
+    setState(() {
+      hasPassword = globalPassword != null;
+    });
+  }
+  Future<void> changeGlobalPassword(BuildContext context) async {
+    await setGlobalPassword(context); // reuse the same dialog
+  }
+
+
   @override
   Widget build(BuildContext context) {
 
@@ -68,6 +90,7 @@ appBar: AppBar(
 ),
       body: SafeArea(child: Column(
         children: [
+          if(!hasPassword)
           ListTile(
             onTap: (){
               setGlobalPassword(context);
@@ -75,9 +98,13 @@ appBar: AppBar(
             leading: Icon(Icons.fingerprint_outlined),
             title: Text('Set 4-Digit pin'),
           ),
+          if(hasPassword)
           ListTile(
             leading: Icon(Icons.fingerprint_outlined),
             title: Text('Change 4-Digit pin'),
+            onTap: (){
+              changeGlobalPassword(context);
+            },
           ),
           ListTile(
             onTap: (){

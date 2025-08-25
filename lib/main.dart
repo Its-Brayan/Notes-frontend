@@ -9,6 +9,8 @@ import 'package:notes/Screens/Settings/settings.dart';
 import 'package:notes/Screens/Settings/about.dart';
 import 'package:notes/Screens/Auth/usernamepage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
@@ -50,6 +52,13 @@ class MyApp extends StatelessWidget {
 
       ),
   home: splashscreen(),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        FlutterQuillLocalizations.delegate,
+      ],
+
     );
   }
 }

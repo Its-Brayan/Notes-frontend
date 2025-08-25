@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:notes/Models/NotesModel.dart';
 import 'package:notes/Providers/Notesprovider.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
+
+
 class notetaker extends StatefulWidget {
   notetaker({super.key});
 
@@ -23,7 +26,8 @@ class _notetakerState extends State<notetaker> {
     });
   }
  final TextEditingController titleController = TextEditingController();
-
+final quill.QuillController _controller = quill.QuillController.basic();
+bool _showtoolbar = false;
  final TextEditingController contentController = TextEditingController();
 
   @override
@@ -33,6 +37,8 @@ class _notetakerState extends State<notetaker> {
       backgroundColor: Colors.black,
       body: SafeArea(child: Column(
         children: [
+
+
           ListTile(
          leading: IconButton(onPressed: () async {
            final title = titleController.text;
@@ -87,10 +93,7 @@ class _notetakerState extends State<notetaker> {
                 }, icon:Icon(Icons.push_pin_outlined,
                 color:notesProvider.currentnote?.pinned == true ? Colors.orange : Colors.white)
                 ),
-                IconButton(onPressed: (){}, icon:Icon(Icons.lock_outline,
-                  color: Colors.white,
-                ),
-                ),
+
                 IconButton(onPressed: () async{
                   if(titleController.text.trim().isEmpty && contentController.text.trim().isEmpty){
                     await notesProvider.deletenote(notesProvider.currentnote!.id!);
@@ -158,42 +161,67 @@ class _notetakerState extends State<notetaker> {
             ),
           ),
 
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: quill.QuillEditor.basic(
+                controller: _controller,
+                config: quill.QuillEditorConfig(
+                  expands: true,
 
-              cursorColor: Colors.orange,
-              textDirection: TextDirection.ltr,
-              toolbarOptions: ToolbarOptions(
-                copy: true,
-                cut: true,
-                paste: true,
-                selectAll: true,
-              ),
-              decoration: InputDecoration(
-                hintText: 'Take a note...',
-                border: InputBorder.none,
-              ),
-              maxLines: null,
-              keyboardType: TextInputType.multiline,
-              textCapitalization: TextCapitalization.sentences,
-              textAlign: TextAlign.start,
-              enableSuggestions: true,
-              autofocus: true,
-              controller: contentController,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-              ),
-              ),
+                  padding: EdgeInsets.all(8),
+                ),
 
-            ),
+                ),
+
+              ),
+          ),
+          
 
 
 
 
           ]
-      )),
+      ),
+
+    ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.orange,
+        child: Icon(_showtoolbar ? Icons.close : Icons.format_size),
+        onPressed: () {
+          setState(() {
+            _showtoolbar = !_showtoolbar;
+          });
+        },
+      ),
+      bottomNavigationBar: _showtoolbar
+    ? Container(
+    color: Colors.grey.shade900,
+      height: 55,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          quill.QuillSimpleToolbar(
+            controller: _controller,
+            config: quill.QuillSimpleToolbarConfig(
+
+              showBoldButton: true,
+              showItalicButton: true,
+              showUnderLineButton: true,
+              showHeaderStyle: true,
+              showListBullets: true,
+              showListNumbers: true,
+              showQuote: true,
+              showCodeBlock: true,
+
+            ),
+          ),
+        ],
+      ),
+    )
+        : null,
     );
+
   }
 }
+

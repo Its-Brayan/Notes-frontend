@@ -21,10 +21,7 @@ class _HomeState extends State<Home> {
     });
     _loadUsername();
   }
-  Future<void> setGlobalPassword(String password) async{
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString('global_password', password);
-  }
+
   Future<String?> getGlobalPassword() async{
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('global_password');
@@ -190,7 +187,8 @@ class _HomeState extends State<Home> {
                                   }
                                      else if(note.locked){
                                        final enteredPin = await _askForPin(context);
-                                       if(enteredPin !=null){
+                                       final globalpassword = await getGlobalPassword();
+                                       if(enteredPin != null && globalpassword != null && enteredPin == globalpassword){
                                          bool success = await notesProvider.unlockNote(note.id!,enteredPin);
                                          if(success){
                                            notesProvider.toggleSelection(note.id!);
@@ -234,7 +232,7 @@ class _HomeState extends State<Home> {
                                           size: 40,
                                           ),
                                         )
-                                    
+
                                       )
                                     ),
                                   )
@@ -310,20 +308,32 @@ bottomNavigationBar: Consumer<NotesProvider>(
          IconButton(
            tooltip: "Lock",
              onPressed: () async{
-             final pin = await _askForPin(context);
-             if(pin != null && pin.length == 4){
-               notesProvider.selectedNotes.forEach((noteId) {
-                 notesProvider.lockNoteById(noteId, pin);
-               });
-               notesProvider.selectedNotes.clear();
-             }else{
-               ScaffoldMessenger.of(context).showSnackBar(
-                 SnackBar(
-                   content: Text('Enter a valid 4-Digit pin'),
-                   duration: Duration(seconds: 2),
-                 ),
-               );
+             final globalpassword = await getGlobalPassword();
+             if(globalpassword == null){{
+             ScaffoldMessenger.of(context).showSnackBar(
+               SnackBar(
+                 content: Text('Set a password first in settings'),
+                 duration: Duration(seconds: 2),
+               ),
+             );
+             return;
              }
+
+
+             }
+             // Ask for PIN confirmation before locking
+             final enteredPin = await _askForPin(context);
+             if (enteredPin == null || enteredPin != globalpassword) {
+               ScaffoldMessenger.of(context).showSnackBar(
+                 SnackBar(content: Text('Invalid PIN. Try again.')),
+               );
+               return;
+             }
+             // Lock the selected notes
+             notesProvider.selectedNotes.forEach((noteId) {
+               notesProvider.lockNoteById(noteId, globalpassword);
+
+             });
              }, icon: Icon(Icons.lock_outline,
          size: 20,
    )

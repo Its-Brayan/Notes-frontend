@@ -13,6 +13,7 @@ class notetaker extends StatefulWidget {
 }
 
 class _notetakerState extends State<notetaker> {
+  @override
   void initState(){
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -20,7 +21,7 @@ class _notetakerState extends State<notetaker> {
       final note = notesProvider.currentnote;
       if(note != null){
         titleController.text = note.title ?? '';
-        contentController.text = note.content ?? '';
+        _controller.document = quill.Document()..insert(0, note.content ?? '');
       }
 
     });
@@ -29,7 +30,7 @@ class _notetakerState extends State<notetaker> {
 final quill.QuillController _controller = quill.QuillController.basic();
 
 bool _showtoolbar = false;
- final TextEditingController contentController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {

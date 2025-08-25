@@ -196,11 +196,11 @@ bool _showtoolbar = false;
           });
         },
       ),
-      bottomNavigationBar: _showtoolbar
+      bottomSheet: _showtoolbar
       ?(isKeyboardOpen
       ? Container(
     color: Colors.grey.shade900,
-      height: 55,
+      height: 45,
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [

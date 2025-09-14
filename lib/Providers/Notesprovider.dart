@@ -55,7 +55,7 @@ class NotesProvider with ChangeNotifier {
     notifyListeners();
     final success = await NotesServices().createnote(notes);
     if (!success) {
-      _errorMessage = 'Failed to create note';
+      _errorMessage = 'Failed to create note!';
       return false;
     } else {
       notifyListeners();

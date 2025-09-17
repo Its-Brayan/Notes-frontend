@@ -117,7 +117,7 @@ if(response.statusCode==200){
         }),
       );
       if (response.statusCode == 200) {
-        print("Note unlocked");
+        print("Note unlocked!");
         print(response.body);
         return true;
       } else {
